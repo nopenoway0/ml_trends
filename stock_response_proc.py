@@ -3,7 +3,7 @@ from pandas import DataFrame
 from os import listdir
 filename = "jill_stock_data.txt"
 directory = 'stock_data'
-entry_reg, field_reg, value_reg = r'.*?\{(.*?)\}', r'.*?\"([a-zA-Z]+)\"\:', r'.*?\"([a-zA-Z]+)\"\:([\"a-zA-Z0-9\- \.]+)'
+entry_reg, field_reg, value_reg = r'.*?\{(.*?)\}', r'.*?\"([a-zA-Z]+)\"\:', r'.*?\"([a-zA-Z]+)\"\:\"*([a-zA-Z0-9\- \.]+)\"*'
 
 # converts the retrieved format from iextrading's, when saved as a text file,
 # into a dataframe to be used by pandas
