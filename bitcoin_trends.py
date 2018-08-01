@@ -2,7 +2,6 @@ import numpy as np
 from pandas import read_csv, to_datetime, merge
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression, Ridge
-import get_optimal_set as gos
 from stock_response_proc import get_dataframes, get_dataframe
 
 # load dataframes from kaggle datasets
@@ -32,9 +31,7 @@ jill_test_values = test_jill_dataframe.iloc[:, 0:2]
 
 # merge into test data frame
 test_dataframe = merge(combined_frames, jill_test_values, on='date', how='inner')
-print(test_dataframe)
 
-'''
 # create feature set (Each type of stock their prices and date)
 # get how many seperate datasets in this case how many unique type of stocks
 stock_datsets = stockmarket_dataframe.Name.unique()
@@ -63,12 +60,10 @@ X = X.iloc[:, 0:-3]
 
 
 # create test and train sets
-from sklearn.model_selection import train_test_split
-#X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=True)
-# in this case use whole set, and will create the test set later
 X_train = X
 y_train = y
-
+X_test = test_dataframe.iloc[:, :-1]
+y_test = test_dataframe.iloc[:, -1:]
 # create SVR regression object
 from sklearn.svm import SVR
 lr =  SVR()
@@ -89,10 +84,14 @@ lr.fit(sc.transform(X_train.iloc[:, 1:]), sc_y.transform(y_train))
 #plt.plot(X.iloc[:, 0], sc_y.inverse_transform(lr.predict(sc.transform(X.iloc[:, 1:]))))
 
 # plot real test values
-plt.plot(X.iloc[:, 0], y)
-plt.plot(X.iloc[:, 0], sc_y.inverse_transform(lr.predict(sc.transform(X.iloc[:, 1:]))))
+#plt.plot(X.iloc[:, 0], y)
+#plt.plot(X.iloc[:, 0], sc_y.inverse_transform(lr.predict(sc.transform(X.iloc[:, 1:]))))
+
+test = range(0, 56)
+
+# plot test values
+plt.plot(X_test.iloc[:, 0], y_test.values.ravel())
 
 # disable bottom ticker, too many days on axis, annoying
 #plt.tick_params()
 plt.show()
-'''
